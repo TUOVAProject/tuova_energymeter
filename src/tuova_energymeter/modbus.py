@@ -3,6 +3,7 @@ from pymodbus import client as pymodbus_client
 # EM530 modbus registers (see manual, table 4.1)
 # format: [("KEY", ADDR, "UNIT", FACTOR, "TYPE")]
 # byte order MSB, word order LSW
+
 fields = [
     # voltages
     ("V_L1_N", 0x0000, "V", 10, "INT32"),
@@ -125,7 +126,7 @@ fields = [
 
 def read_data(opts={"mb_client":None}):
     
-    mb_client:pymodbus_client.AsyncModbusSerialClient = opts["mb_client"]
+    mb_client:pymodbus_client.ModbusSerialClient = opts["mb_client"]
 
     if mb_client == None:
         print("read_data: client is None")
@@ -133,11 +134,41 @@ def read_data(opts={"mb_client":None}):
 
     print("modbus - read_data")
 
-    # read everything first and parse values afterwards
-    read_start = 0 # 0x0000
-    read_end = 218 # 0x00DA
-    buffer = []
+    # max 125 registers at a time, so two reads needed
+    result1 = mb_client.read_holding_registers(address=0, count=120).registers
+    result2 = mb_client.read_holding_registers(address=120, count=98).registers
 
-    # max 125 registers at a time
+    # combine
+    result = result1 + result2
 
-    # TODO: do the thing
+    # result should now have 218 registers (16bit)
+    # parse values as per "fields" above
+    data = {}
+    for field in fields:
+        tag = field[0]
+        addr = field[1]
+        unit = field[2]
+        mult = field[3]
+        type = field[4]
+
+        if type == "INT16":
+            val = float(int(result[addr]) / mult)
+
+            # keys as "TAG(UNIT)"
+            data[f"{tag}({unit})"] = val
+
+        if type == "INT32":
+            # LOGIK!
+            # 1. shift lower word 16 bits to the left
+            # 2. just handle the higher word as 32bit int
+            # 3. OR them together
+            # the EM530 manual states "LSW -> MSW", so lower is [addr + 1] (maybe)
+            # (0xD8 (216 dec) is the last address, so [addr + 1] should be fine)
+            lower = int(int(result[addr + 1]) << 16)
+            higher = int(int(result[addr]))
+            val = float(int(higher | lower) / mult)
+
+            # keys as "TAG(UNIT)"
+            data[f"{tag}({unit})"] = val
+
+    return data
