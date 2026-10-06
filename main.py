@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
-from pymodbus import client
+from pymodbus import client as modbus_client
+import influxdb_client
+from influxdb_client.client.write_api import SYNCHRONOUS
 from tuova_energymeter import modbus
 from tuova_energymeter import influx
 
@@ -15,10 +17,13 @@ def main():
         return -1
     
     # create modbus client
-    mb_client = client.ModbusSerialClient(port=config["serial_path"], baudrate=config["serial_baud"])
+    mb_client = modbus_client.ModbusSerialClient(port=config["serial_path"], baudrate=config["serial_baud"])
     mb_client.connect()
 
     # create influx client
+    in_client = influxdb_client.InfluxDBClient(url=config["influx_url"], org=config["influx_org"], token=config["influx_token"], verify_ssl=False)
+    in_client_api = in_client.write_api(write_options=SYNCHRONOUS)
+    config["in_client_api"] = in_client_api
 
     # TODO: LOOP
 
