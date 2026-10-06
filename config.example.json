@@ -1,0 +1,11 @@
+{
+  "serial_path": "/dev/ttyS0",
+  "serial_baud": 9600,
+
+  "influx_url": "",
+  "influx_org": "",
+  "influx_bucket": "",
+  "influx_measurement": "",
+  "influx_sensor_id": "",
+  "influx_token": ""
+}

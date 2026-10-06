@@ -1,0 +1,22 @@
+[project]
+name = "tuova_energymeter"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Mika Leskinen", email = "mika.leskinen@savonia.fi" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.14.3",
+    "influxdb-client>=1.50.0",
+    "pymodbus>=3.15.0",
+    "pyserial>=3.5",
+]
+
+[project.scripts]
+tuova_energymeter = "tuova_energymeter:main"
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
