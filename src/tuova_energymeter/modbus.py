@@ -132,7 +132,7 @@ def read_data(opts={"mb_client":None}):
         print("read_data: client is None")
         return None
 
-    print("modbus - read_data")
+    # print("modbus - read_data")
 
     # max 125 registers at a time, so two reads needed
     result1 = mb_client.read_holding_registers(address=0, count=120).registers

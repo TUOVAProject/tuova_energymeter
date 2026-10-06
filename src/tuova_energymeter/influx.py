@@ -6,7 +6,7 @@ def write_data(data:dict=None, ts=None, opts=None):
         print("influx - write_data: err")
         return -1
 
-    print("influx - write_data")
+    # print("influx - write_data")
 
     client_api : influxdb_client.WriteApi = opts["in_client_api"]
 
