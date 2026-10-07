@@ -1,0 +1,16 @@
+# start with "docker compose up -d"
+
+services:
+  tuova_energymeter:
+    image: python:3.10-slim
+    container_name: tuova_energymeter
+    restart: unless-stopped
+    # stuff in ./build gets mounted to /root/app
+    volumes:
+      - .:/root/app
+    # mount the modbus serial device:
+    devices:
+      - /dev/ttyS0:/dev/ttyS0:rwm
+    working_dir: /root/app
+    # run the entrypoint script:
+    entrypoint: /root/app/start.sh

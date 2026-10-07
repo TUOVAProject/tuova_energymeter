@@ -3,3 +3,4 @@ __pycache__
 /tty*
 /data
 /config.json
+/build
