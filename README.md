@@ -2,9 +2,7 @@
 
 > ## IMPORTANT!
 >
-> This repository was created as part of the TUOVA Project (see https://tuova.savonia.fi and https://tuovaproject.github.io/). Some of the information presented here might assume
-> familiarity with other repositories created during the course of the project. For more details on those, see the "Additional Information" section at the bottom of this README.
-> It is assumed that an InfluxDB database is already deployed.
+> This repository was created as part of the TUOVA Project (see https://tuova.savonia.fi and https://tuovaproject.github.io/). Some of the information presented here might assume familiarity with other repositories created during the course of the project. For more details on those, see the "Additional Information" section at the bottom of this README.
 >
 > **Everything is provided as-is, use at your own risk.**
 >
@@ -18,20 +16,24 @@ This repository contains a Python application for reading electrical parameters 
 those readings into an InfluxDB database for further processing. The application was designed to run on a Raspberry Pi equipped with a Modbus/RS-485 HAT
 (Hardware Attached on Top), but with certain adjustments it would work as well on e.g. a Linux laptop with a USB to RS-485 adapter.
 
+## Prerequisites
+
+- It is assumed that an InfluxDB database is already deployed.
+
 ## Example RPi setup
 
 ### Components used
 
 - Carlo Gavazzi EM530 energy analyzer with Modbus output
-  - see https://www.gavazziautomation.com/fileadmin/images/PIM/DATASHEET/ENG/EM530_DS_ENG.pdf
+    - see https://www.gavazziautomation.com/fileadmin/images/PIM/DATASHEET/ENG/EM530_DS_ENG.pdf
 - 24VDC power supply
-  - like this one: https://www.bke.cz/datasheets/30319002/30319002EN.pdf
+    - like this one: https://www.bke.cz/datasheets/30319002/30319002EN.pdf
 - Raspberry Pi Zero 2W
-  - see https://learn.sparkfun.com/tutorials/getting-started-with-the-raspberry-pi-zero-2-w/all
+    - see https://learn.sparkfun.com/tutorials/getting-started-with-the-raspberry-pi-zero-2-w/all
 - Waveshare RS485/CAN HAT
-  - see: https://www.waveshare.com/wiki/RS485_CAN_HAT
+    - see: https://www.waveshare.com/wiki/RS485_CAN_HAT
 - Adjustable DC-DC buck converter
-  - like one of these: https://thepihut.com/products/20w-adjustable-dc-dc-buck-converter-with-digital-display
+    - like one of these: https://thepihut.com/products/20w-adjustable-dc-dc-buck-converter-with-digital-display
 
 It is worth noting that the 24VDC power supply and the DC-DC converter used here are not mandatory for a basic setup, since the Pi can easily be powered
 from a wall outlet using a standard 5V USB power supply. In this example, the whole setup was built inside a distribution box without a wall outlet nearby.
@@ -40,15 +42,15 @@ from a wall outlet using a standard 5V USB power supply. In this example, the wh
 
 1. Attach the RS-485 HAT on top of the Pi Zero and check that the module's 120ohm bus termination resistor is enabled (if applicable)
 2. Wire the RS-485 HAT's connectors as follows:
-   - `A` goes to pin `8` of the EM530 energy analyzer
-   - `B` goes to pin `9` of the EM530 energy analyzer
-   - (note that `A` and `B` might be the other way around with certain modules/devices, so just swap them if there's no data)
+    - `A` goes to pin `8` of the EM530 energy analyzer
+    - `B` goes to pin `9` of the EM530 energy analyzer
+    - (note that `A` and `B` might be the other way around with certain modules/devices, so just swap them if there's no data)
 
 3. Connect the 24VDC output of the power supply to the input side of the DC-DC buck converter
 4. Adjust the DC-DC buck converter output to around 5VDC
 5. Connect the output of the DC-DC buck converter to the Pi Zero
-   - you can cut a USB-A -> USB-Micro-B cable in half, connect the Micro-B side to the Pi, and the red (+) and black (-) wires to the output side of the DC-DC converter
-   - (you should always check that the colors are correct, though)
+    - you can cut a USB-A -> USB-Micro-B cable in half, connect the Micro-B side to the Pi, and the red (+) and black (-) wires to the output side of the DC-DC converter
+    - (you should always check that the colors are correct, though)
 
 ### Final product
 
@@ -79,16 +81,16 @@ socat PTY,link=./ttyS0,rawer,echo=0 EXEC:"ssh USER@RASPI 'socat - FILE:/dev/ttyS
 
     ```json
     {
-      "serial_path": "/dev/ttyS0",
-      "serial_baud": 9600,
+        "serial_path": "/dev/ttyS0",
+        "serial_baud": 9600,
 
-      "influx_url": "https://YOUR_INFLUX_URL",
+        "influx_url": "https://YOUR_INFLUX_URL",
 
-      "influx_org": "YOUR_ORG",
-      "influx_bucket": "YOUR_BUCKET_NAME",
-      "influx_measurement": "YOUR_MEASUREMENT_NAME",
-      "influx_sensor_id": "YOUR_SENSOR_ID",
-      "influx_token": "YOUR_INFLUXDB_WRITE_ACCESS_TOKEN"
+        "influx_org": "YOUR_ORG",
+        "influx_bucket": "YOUR_BUCKET_NAME",
+        "influx_measurement": "YOUR_MEASUREMENT_NAME",
+        "influx_sensor_id": "YOUR_SENSOR_ID",
+        "influx_token": "YOUR_INFLUXDB_WRITE_ACCESS_TOKEN"
     }
     ```
 
@@ -118,9 +120,17 @@ See [LICENCE.md](LICENCE.md)
 - https://github.com/TUOVAProject/tuotantotiedon-tietomalli
 - https://tuovaproject.github.io/tuotantotiedon-tietomalli/
 
+### On-premises server environment
+
+- https://github.com/TUOVAProject/tuova_on_prem_server
+
 ### Sensor data collection system
 
 - https://github.com/TUOVAProject/tuova-iot
+
+### Energy analyzer data collection system
+
+- https://github.com/TUOVAProject/tuova_energymeter
 
 ### Sensor data ETL process
 
