@@ -104,9 +104,9 @@ socat PTY,link=./ttyS0,rawer,echo=0 EXEC:"ssh USER@RASPI 'socat - FILE:/dev/ttyS
 
 If nothing in this README (or the code) makes sense, feel free to improve.
 
-## LICENCE
+## LICENSE
 
-See [LICENCE.md](LICENCE.md)
+See [LICENSE](LICENSE)
 
 ## Additional Information
 
