@@ -1,4 +1,4 @@
-# tuova_energymeter
+# TUOVA Energy Analyzer Data Collection System
 
 > ## IMPORTANT!
 >
